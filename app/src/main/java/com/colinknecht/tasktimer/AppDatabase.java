@@ -34,6 +34,7 @@ class AppDatabase extends SQLiteOpenHelper {
      */
     static AppDatabase getInstance(Context context) {
         if (instance == null){
+            Log.d(TAG, "================getInstance: creating new instance");
             instance = new AppDatabase(context);
         }
         return instance;
@@ -56,6 +57,15 @@ class AppDatabase extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        Log.d(TAG, "=============onUpgrade: starts");
+        switch (oldVersion) {
+            case 1:
+                //upgrade logic from version 1
+                break;
+            default:
+                throw new IllegalStateException("onUpgrade() with unknown new version: " + newVersion);
 
+        }
+        Log.d(TAG, "==================onUpgrade: ends");
     }
 }
