@@ -1,17 +1,20 @@
 package com.colinknecht.tasktimer;
 
+import android.content.ContentResolver;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
-
+    private static final String TAG = "MainActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,8 +22,27 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        AppDatabase appDatabase = AppDatabase.getInstance(this);
-        final SQLiteDatabase db =  appDatabase.getReadableDatabase();
+        String[] projection = {TaskContract.Columns.TASKS_NAME, TaskContract.Columns.TASKS_DESCRIPTION};
+        ContentResolver contentResolver = getContentResolver();
+        Cursor cursor = contentResolver.query(TaskContract.CONTENT_URI,
+                projection,
+                null,
+                null,
+                TaskContract.Columns.TASKS_SORT_ORDER);
+
+
+        if (cursor != null) {
+            Log.d(TAG, "=====================onCreate: number of rows " + cursor.getCount());
+            while (cursor.moveToNext()) {
+                for (int i = 0; i < cursor.getColumnCount(); i++) {
+                    Log.d(TAG, "========onCreate: " + cursor.getColumnName(i) + ":" + cursor.getString(i));
+                }
+                Log.d(TAG, "onCreate: +++++++++++++++++++++++++END RECORD+++++++++++++++++++++++++++++++++");
+            }
+            cursor.close();
+        }
+//        AppDatabase appDatabase = AppDatabase.getInstance(this);
+//        final SQLiteDatabase db =  appDatabase.getReadableDatabase();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
