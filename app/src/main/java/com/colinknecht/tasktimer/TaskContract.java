@@ -1,6 +1,11 @@
 package com.colinknecht.tasktimer;
 
+import android.content.ContentUris;
+import android.net.Uri;
 import android.provider.BaseColumns;
+
+import static com.colinknecht.tasktimer.AppProvider.CONTENT_AUTHORITY;
+import static com.colinknecht.tasktimer.AppProvider.CONTENT_AUTHORITY_URI;
 
 /**
  * Created by colinknecht on 7/26/17.
@@ -20,4 +25,18 @@ public class TaskContract {
             //private Constructor to prevent instantiation
         }
     }//////////////////////////////////////end Columns Class
+
+    /**
+     * The URI to access the Tasks table
+     */
+    public static final Uri CONTENT_URI = Uri.withAppendedPath(CONTENT_AUTHORITY_URI, TABLE_NAME);
+    static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + CONTENT_AUTHORITY + "." + TABLE_NAME;
+    static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd." + CONTENT_AUTHORITY + "." + TABLE_NAME;
+
+    static Uri buildTaskUri(long taskId) {
+        return ContentUris.withAppendedId(CONTENT_URI,taskId);
+    }
+    static long getTaskId(Uri uri) {
+        return ContentUris.parseId(uri);
+    }
 }
