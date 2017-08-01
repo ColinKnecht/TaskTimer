@@ -170,7 +170,7 @@ public class AppProvider extends ContentProvider {
         Log.d(TAG, "update: match is " + match);
 
         final SQLiteDatabase db;
-        int count;
+        int count = 0;
 
         String selectionCriteria;
 
@@ -201,7 +201,7 @@ public class AppProvider extends ContentProvider {
 //                }
 //                count = db.delete(TaskContract.TABLE_NAME, selectionCriteria, selectionArgs);
 //                break;
-//            default:
+            default:
             throw new IllegalArgumentException("Unknown uri " + uri);
         }//switch
         Log.d(TAG, "Exiting update, returning count " + count);
@@ -247,7 +247,7 @@ public class AppProvider extends ContentProvider {
 //                }
 //                count = db.update(TaskContract.TABLE_NAME, values, selectionCriteria, selectionArgs);
 //                break;
-//            default:
+            default:
                 throw new IllegalArgumentException("Unknown uri " + uri);
         }//switch
         Log.d(TAG, "Exiting update, returning count " + count);
