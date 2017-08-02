@@ -7,4 +7,6 @@
     <string name="menu_main_showAbout">About Task Timer</string>
     <string name="menu_main_generate">Generate Data</string>
     <string name="no_task_message">No Task Selected</string>
+    <string name="edit_button_description">Button to edit task details.</string>
+    <string name="delete_button_description">button to delete task.</string>
 </resources>
