@@ -21,9 +21,19 @@
         </activity>
 
         <provider
-            android:name="com.colinknecht.tasktimer.AppProvider"
+            android:name=".AppProvider"
             android:authorities="com.colinknecht.tasktimer.provider"
             android:exported="false"/>
+
+        <activity
+            android:name=".AddEditActivity"
+            android:label="@string/title_activity_add_edit"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.colinknecht.tasktimer.MainActivity"/>
+        </activity>
     </application>
 
 </manifest>

@@ -13,4 +13,5 @@
     <string name="add_edit_description_hint">Task Description: Optional</string>
     <string name="add_edit_sort_hint">Orders: sorts low to high</string>
     <string name="add_edit_save_text">Save</string>
+    <string name="title_activity_add_edit">AddEditActivity</string>
 </resources>
