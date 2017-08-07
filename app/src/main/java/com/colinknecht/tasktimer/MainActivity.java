@@ -2,6 +2,7 @@ package com.colinknecht.tasktimer;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
@@ -17,6 +18,11 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
+
+    //whether or not the activity is in 2 pane mode
+    private boolean mTwoPane = false;
+
+    private static final String ADD_EDIT_FRAGMENT = "AddEditFragment";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,72 +30,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        String[] projection = {TaskContract.Columns._ID,
-                TaskContract.Columns.TASKS_NAME,
-                TaskContract.Columns.TASKS_DESCRIPTION,
-                TaskContract.Columns.TASKS_SORT_ORDER};
-        ContentResolver contentResolver = getContentResolver();
 
-        ContentValues values = new ContentValues();
-        //how to update multiple rows
-//        values.put(TaskContract.Columns.TASKS_SORT_ORDER, "99");
-//        values.put(TaskContract.Columns.TASKS_DESCRIPTION, "Completed");
-//        String selection = TaskContract.Columns.TASKS_SORT_ORDER + " = " + 2;
-//        int count = contentResolver.update(TaskContract.CONTENT_URI, values, selection, null);
-//        Log.d(TAG, "onCreate: " + count + " records updated");
-
-//        values.put(TaskContract.Columns.TASKS_DESCRIPTION, "for deletion");
-//        String selection = TaskContract.Columns.TASKS_SORT_ORDER + " = ?";
-//        String[] args = {"99"};
-
-//        int count = contentResolver.delete(TaskContract.buildTaskUri(3), null, null);
-//        Log.d(TAG, "onCreate: " + count + " records deleted");
-
-        String selection = TaskContract.Columns.TASKS_DESCRIPTION + " = ?";
-        String args[] = {"for deletion"};
-        int count = contentResolver.delete(TaskContract.CONTENT_URI, selection, args);
-        Log.d(TAG, "onCreate: " + count + " records deleted");
-
-        //how to update a row
-//        values.put(TaskContract.Columns.TASKS_NAME, "Content Provider");
-//        values.put(TaskContract.Columns.TASKS_DESCRIPTION, "Record content provider video");
-//        int count = contentResolver.update(TaskContract.buildTaskUri(4), values, null, null);
-//        Log.d(TAG, "onCreate: " + count + " records updated");
-
-        //how to add a row
-//        values.put(TaskContract.Columns.TASKS_NAME, "New Task 1");
-//        values.put(TaskContract.Columns.TASKS_DESCRIPTION, "Description 1");
-//        values.put(TaskContract.Columns.TASKS_SORT_ORDER, 2);
-//        Uri uri = contentResolver.insert(TaskContract.CONTENT_URI, values);
-
-        Cursor cursor = contentResolver.query(TaskContract.CONTENT_URI,
-                projection,
-                null,
-                null,
-                TaskContract.Columns.TASKS_SORT_ORDER);
-
-
-        if (cursor != null) {
-            Log.d(TAG, "=====================onCreate: number of rows " + cursor.getCount());
-            while (cursor.moveToNext()) {
-                for (int i = 0; i < cursor.getColumnCount(); i++) {
-                    Log.d(TAG, "========onCreate: " + cursor.getColumnName(i) + ":" + cursor.getString(i));
-                }
-                Log.d(TAG, "onCreate: +++++++++++++++++++++++++END RECORD+++++++++++++++++++++++++++++++++");
-            }
-            cursor.close();
-        }
-//        AppDatabase appDatabase = AppDatabase.getInstance(this);
-//        final SQLiteDatabase db =  appDatabase.getReadableDatabase();
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
     }
 
     @Override
@@ -107,10 +48,39 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.menu_main_settings) {
-            return true;
+        switch (id) {
+            case R.id.menu_main_addTask:
+                taskEditRequest(null);
+                break;
+            case R.id.menu_main_showDurations:
+                break;
+            case R.id.menu_main_settings:
+                break;
+            case R.id.menu_main_showAbout:
+                break;
+            case R.id.menu_main_generate:
+                break;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void taskEditRequest(Task task) {
+        Log.d(TAG, "taskEditRequest: starts");
+        if (mTwoPane) {
+            Log.d(TAG, "taskEditRequest: in two pane mode (tablet)");
+        }
+        else {
+            Log.d(TAG, "taskEditRequest: in single-pane mode (phone)");
+            //in single pane mode, start the detail activity for the selected item ID.
+            Intent detailIntent = new Intent(this, AddEditActivity.class);
+            if (task != null) {
+                detailIntent.putExtra(Task.class.getSimpleName(), task);
+                startActivity(detailIntent);
+            }
+            else  { //adding a new task
+                startActivity(detailIntent);
+            }
+        }
     }
 }
