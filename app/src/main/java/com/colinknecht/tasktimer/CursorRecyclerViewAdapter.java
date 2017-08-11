@@ -36,10 +36,11 @@ class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecyclerViewA
         if (mCursor == null || mCursor.getCount() == 0) {
             Log.d(TAG, "onBindViewHolder: providing instructions");
             holder.name.setText("Instructions");
-            holder.description.setText("Use the add button (+) in the toolbar above to create new tasks" +
-            "\n Task with the lower sort order will be placed higher up in the list " +
-            " Tasks with the same sort order will be sorted alphabetically." +
-            "\n Tapping a task will start the timer for that task");
+            holder.description.setText("This is the description");
+//            holder.description.setText("Use the add button (+) in the toolbar above to create new tasks" +
+//            "\n Task with the lower sort order will be placed higher up in the list " +
+//            " Tasks with the same sort order will be sorted alphabetically." +
+//            "\n Tapping a task will start the timer for that task");
             holder.editButton.setVisibility(View.GONE);
             holder.deleteButton.setVisibility(View.GONE);
         } else {
@@ -82,7 +83,7 @@ class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecyclerViewA
             notifyDataSetChanged();
         } else {
             //notify observers about the lack of a data set
-            notifyItemRangeChanged(0, getItemCount());
+            notifyItemRangeRemoved(0, getItemCount());
         }
         return oldCursor;
     }

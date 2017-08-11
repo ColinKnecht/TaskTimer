@@ -100,7 +100,12 @@ public class AppProvider extends ContentProvider {
                 throw new IllegalArgumentException("Unknown URI: " + uri);
         }
         SQLiteDatabase db = mOpenHelper.getReadableDatabase();
-        return queryBuilder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
+//        return queryBuilder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
+        Cursor cursor = queryBuilder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
+        Log.d(TAG, "query: query rows in returned cursor =  " + cursor.getCount());//TODO remove this line
+
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
+        return cursor;
 
     }
 
@@ -159,6 +164,13 @@ public class AppProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Unknown uri: " + uri);
         }
+        if (recordId >= 0) {
+            //something was inserted
+            Log.d(TAG, "insert: Setting notifyChanged with " + uri);
+            getContext().getContentResolver().notifyChange(uri, null);
+        } else {
+            Log.d(TAG, "insert: nothing was inserted");
+        }
         Log.d(TAG, "Exiting insert, returning " + returnUri);
         return returnUri;
     }
@@ -204,6 +216,13 @@ public class AppProvider extends ContentProvider {
             default:
             throw new IllegalArgumentException("Unknown uri " + uri);
         }//switch
+        if (count > 0) {
+            //something was deleted
+            Log.d(TAG, "delete: setting notify changed with " + uri);
+            getContext().getContentResolver().notifyChange(uri,null);
+        } else {
+            Log.d(TAG, "delete: nothing deleted");
+        }
         Log.d(TAG, "Exiting update, returning count " + count);
 
         return count;
@@ -250,6 +269,13 @@ public class AppProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Unknown uri " + uri);
         }//switch
+        if (count > 0) {
+            //something was deleted
+            Log.d(TAG, "update: setting notify changed with " + uri);
+            getContext().getContentResolver().notifyChange(uri,null);
+        } else {
+            Log.d(TAG, "update: nothing deleted");
+        }
         Log.d(TAG, "Exiting update, returning count " + count);
 
         return count;
