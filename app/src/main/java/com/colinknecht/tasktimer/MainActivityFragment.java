@@ -7,6 +7,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +23,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     private static final String TAG = "MainActivityFragment";
     
     public static final int LOADER_ID = 0;
+    private CursorRecyclerViewAdapter mAdapter; //add adapter reference
     public MainActivityFragment() {
         Log.d(TAG, "MainActivityFragment: constructor called");
     }
@@ -32,11 +35,26 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         getLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
+    /**
+     * Video 224 @ 11 mins shows how to hook up the RecyclerView Below
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView: starts");
-        return inflater.inflate(R.layout.fragment_main, container, false);
+        View view = inflater.inflate(R.layout.fragment_main,container, false);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.task_list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        mAdapter = new CursorRecyclerViewAdapter(null);
+        recyclerView.setAdapter(mAdapter);
+
+        Log.d(TAG, "onCreateView: returning");
+        return view;
     }
 
     @Override
@@ -61,21 +79,16 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         Log.d(TAG, "onLoadFinished: starts");
-        int count = -1;
-        if (data != null) {
-            while (data.moveToNext()) {
-                for (int i = 0; i < data.getColumnCount(); i++){
-                    Log.d(TAG, "onLoadFinished: " + data.getColumnName(i) + " : " + data.getString(i) );
-                }
-                Log.d(TAG, "onLoadFinished: ====================END RECORD========================");
-            }
-            count = data.getCount();
-        }
+        mAdapter.swapCursor(data);
+        int count = mAdapter.getItemCount();
+
+
         Log.d(TAG, "onLoadFinished: count is " + count);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         Log.d(TAG, "onLoaderReset: starts");
+        mAdapter.swapCursor(null);
     }
 }

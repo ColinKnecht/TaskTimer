@@ -35,7 +35,8 @@ class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecyclerViewA
 
         if (mCursor == null || mCursor.getCount() == 0) {
             Log.d(TAG, "onBindViewHolder: providing instructions");
-            holder.name.setText("Use the add button (+) in the toolbar above to create new tasks" +
+            holder.name.setText("Instructions");
+            holder.description.setText("Use the add button (+) in the toolbar above to create new tasks" +
             "\n Task with the lower sort order will be placed higher up in the list " +
             " Tasks with the same sort order will be sorted alphabetically." +
             "\n Tapping a task will start the timer for that task");
@@ -54,7 +55,36 @@ class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecyclerViewA
 
     @Override
     public int getItemCount() {
-        return 0;
+        Log.d(TAG, "getItemCount: starts");
+        if (mCursor == null || mCursor.getCount() == 0 ){
+            return 1; //fib, because we popluate a single viewholder for instructions
+        } else {
+            return mCursor.getCount();
+        }
+    }
+
+    /**
+     * Swap in a new Cursor, returning the old Cursor
+     * The returned old cursor is <em>not</em> closed
+     * @param newCursor the new cursor to be used
+     * @return returns the previously set Cursor, or null if there wasnt one
+     * If the given new cursor is the same instance as the previously set
+     * Cursor, null is returned
+     */
+    Cursor swapCursor (Cursor newCursor) {
+        if (newCursor == mCursor) {
+            return null;
+        }
+        final Cursor oldCursor = mCursor;
+        mCursor = newCursor;
+        if (newCursor != null) {
+            //notify the observers about the newe cursor
+            notifyDataSetChanged();
+        } else {
+            //notify observers about the lack of a data set
+            notifyItemRangeChanged(0, getItemCount());
+        }
+        return oldCursor;
     }
 
     static class TaskViewHolder extends RecyclerView.ViewHolder {
