@@ -98,7 +98,7 @@ class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecyclerViewA
         public TaskViewHolder(View itemView) {
             super(itemView);
             this.name = (TextView) itemView.findViewById(R.id.tli_name);
-            this.description = (TextView) itemView.findViewById(R.id.add_edit_description);
+            this.description = (TextView) itemView.findViewById(R.id.tli_description);
             this.editButton = (ImageButton) itemView.findViewById(R.id.tli_edit);
             this.deleteButton = (ImageButton) itemView.findViewById(R.id.tli_delete);
         }

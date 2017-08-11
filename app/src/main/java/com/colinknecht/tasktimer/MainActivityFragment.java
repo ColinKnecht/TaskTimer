@@ -62,7 +62,8 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         Log.d(TAG, "onCreateLoader: starts with id " + id);
         String [] projection = {TaskContract.Columns._ID, TaskContract.Columns.TASKS_NAME,
                                 TaskContract.Columns.TASKS_DESCRIPTION, TaskContract.Columns.TASKS_SORT_ORDER};
-        String sortOrder = TaskContract.Columns.TASKS_SORT_ORDER + " , " + TaskContract.Columns.TASKS_NAME;
+        // <order by> Tasks.SortOrder, TaskName COLLATE NOCASE
+        String sortOrder = TaskContract.Columns.TASKS_SORT_ORDER + " , " + TaskContract.Columns.TASKS_NAME + " COLLATE NOCASE";
         switch (id) {
             case LOADER_ID:
                 return new CursorLoader(getActivity(),
