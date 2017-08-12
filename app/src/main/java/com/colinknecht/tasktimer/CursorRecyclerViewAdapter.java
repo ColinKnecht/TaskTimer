@@ -1,6 +1,7 @@
 package com.colinknecht.tasktimer;
 
 import android.database.Cursor;
+import android.net.sip.SipAudioCall;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,10 +19,17 @@ import android.widget.Toast;
 class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecyclerViewAdapter.TaskViewHolder> {
     private static final String TAG = "CursorRecyclerViewAdapt";
     private Cursor mCursor;
+    private OnTaskClickListener mListener;
 
-    public CursorRecyclerViewAdapter(Cursor cursor) {
+    interface OnTaskClickListener {
+        void onEditClick(Task task);
+        void onDeleteClick(Task task);
+    }
+
+    public CursorRecyclerViewAdapter(Cursor cursor, OnTaskClickListener listener) {
         Log.d(TAG, "CursorRecyclerViewAdapter: Constructor Called");
         mCursor = cursor;
+        mListener = listener;
     }
     @Override
     public TaskViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -58,15 +66,29 @@ class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecyclerViewA
             holder.editButton.setVisibility(View.VISIBLE); //TODO add onClick Listener
             holder.deleteButton.setVisibility(View.VISIBLE); //TODO add onClick Listener
 
-//            View.OnClickListener buttonListener = new View.OnClickListener() {
-            class Listener implements View.OnClickListener {
+            View.OnClickListener buttonListener = new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
-                    Log.d(TAG, "onClick: Item Clicked");
+                public void onClick(View view) {
+                    Log.d(TAG, "onClick: starts");
+                    switch (view.getId()) {
+                        case R.id.tli_edit:
+                            if (mListener != null){
+                                mListener.onEditClick(task);
+                            }
+                            break;
+                        case R.id.tli_delete:
+                            if (mListener != null) {
+                                mListener.onDeleteClick(task);
+                            }
+                            break;
+                        default:
+                            Log.d(TAG, "onClick: found unexpected button id");
+                    }
+                    Log.d(TAG, "onClick: button with id " + view.getId() + " clicked");
                     Log.d(TAG, "onClick: task name is " + task.getName());
                 }
-            }
-            Listener buttonListener = new Listener();
+            };
+
             holder.editButton.setOnClickListener(buttonListener);
             holder.deleteButton.setOnClickListener(buttonListener);
         }
