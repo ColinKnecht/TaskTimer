@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Created by lori on 8/9/2017.
@@ -47,10 +48,27 @@ class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecyclerViewA
             if (!mCursor.moveToPosition(position)) {
                 throw new IllegalStateException("Couldnt move cursor to postion " + position);
             }
-            holder.name.setText(mCursor.getString(mCursor.getColumnIndex(TaskContract.Columns.TASKS_NAME)));
-            holder.description.setText(mCursor.getString(mCursor.getColumnIndex(TaskContract.Columns.TASKS_DESCRIPTION)));
+            final Task task = new Task(mCursor.getLong(mCursor.getColumnIndex(TaskContract.Columns._ID)),
+                    mCursor.getString(mCursor.getColumnIndex(TaskContract.Columns.TASKS_NAME)),
+                    mCursor.getString(mCursor.getColumnIndex(TaskContract.Columns.TASKS_DESCRIPTION)),
+                    mCursor.getInt(mCursor.getColumnIndex(TaskContract.Columns.TASKS_SORT_ORDER)));
+
+            holder.name.setText(task.getName());
+            holder.description.setText(task.getDescription());
             holder.editButton.setVisibility(View.VISIBLE); //TODO add onClick Listener
             holder.deleteButton.setVisibility(View.VISIBLE); //TODO add onClick Listener
+
+//            View.OnClickListener buttonListener = new View.OnClickListener() {
+            class Listener implements View.OnClickListener {
+                @Override
+                public void onClick(View v) {
+                    Log.d(TAG, "onClick: Item Clicked");
+                    Log.d(TAG, "onClick: task name is " + task.getName());
+                }
+            }
+            Listener buttonListener = new Listener();
+            holder.editButton.setOnClickListener(buttonListener);
+            holder.deleteButton.setOnClickListener(buttonListener);
         }
     }
 
