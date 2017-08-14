@@ -33,14 +33,14 @@ class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecyclerViewA
     }
     @Override
     public TaskViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Log.d(TAG, "onCreateViewHolder: new View Requested");
+//        Log.d(TAG, "onCreateViewHolder: new View Requested");
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.task_list_items, parent,false);
         return new TaskViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(TaskViewHolder holder, int position) {
-        Log.d(TAG, "onBindViewHolder: starts");
+//        Log.d(TAG, "onBindViewHolder: starts");
 
         if (mCursor == null || mCursor.getCount() == 0) {
             Log.d(TAG, "onBindViewHolder: providing instructions");
@@ -69,7 +69,7 @@ class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecyclerViewA
             View.OnClickListener buttonListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.d(TAG, "onClick: starts");
+//                    Log.d(TAG, "onClick: starts");
                     switch (view.getId()) {
                         case R.id.tli_edit:
                             if (mListener != null){
@@ -96,7 +96,7 @@ class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecyclerViewA
 
     @Override
     public int getItemCount() {
-        Log.d(TAG, "getItemCount: starts");
+//        Log.d(TAG, "getItemCount: starts");
         if (mCursor == null || mCursor.getCount() == 0 ){
             return 1; //fib, because we popluate a single viewholder for instructions
         } else {
