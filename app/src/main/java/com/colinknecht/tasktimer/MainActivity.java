@@ -16,6 +16,7 @@ AddEditActivityFragment.OnSaveClicked {
 //    Friday Aug 18
 
     //whether or not the activity is in 2 pane mode
+
     private boolean mTwoPane = false;
 
     private static final String ADD_EDIT_FRAGMENT = "AddEditFragment";
