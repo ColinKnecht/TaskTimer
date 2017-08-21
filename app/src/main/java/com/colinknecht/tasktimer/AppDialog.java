@@ -89,14 +89,18 @@ public class AppDialog extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 //                        callback the positive reult method
-                        mDialogEvents.onPositiveDialogResult(dialogId, arguments);
+                        if (mDialogEvents != null) {
+                            mDialogEvents.onPositiveDialogResult(dialogId, arguments);
+                        }
                     }
                 })
                 .setNegativeButton(negativeStringId, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 //                        callback negative result method
-                        mDialogEvents.onNegativeDialogResult(dialogId, arguments);
+                        if (mDialogEvents != null) {
+                            mDialogEvents.onNegativeDialogResult(dialogId, arguments);
+                        }
                     }
                 });
 
