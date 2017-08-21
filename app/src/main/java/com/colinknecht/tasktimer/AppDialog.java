@@ -58,12 +58,31 @@ public class AppDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Log.d(TAG, "onCreateDialog: starts");
 
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         final Bundle arguments = getArguments();
         final int dialogId;
         String messageString;
         int positiveStringId;
         int negativeStringId;
+
+        if (arguments != null) {
+            dialogId = arguments.getInt(DIALOG_ID);
+            messageString = arguments.getString(DIALOG_MESSAGE);
+            positiveStringId = arguments.getInt(DIALOG_POSITIVE_RID);
+            if (dialogId == 0 || messageString == null) {
+                throw new IllegalArgumentException("DIALOG_ID and/or DIALOG_MESSAGE not present in the bundle");
+            }
+            if (positiveStringId == 0) {
+                positiveStringId = R.string.ok;
+            }
+            negativeStringId = arguments.getInt(DIALOG_NEGATIVE_RID);
+            if (negativeStringId == 0) {
+                negativeStringId = R.string.cancel;
+            }
+        } else {
+            throw new IllegalArgumentException("Must pass DIALOG_ID and DIALOG_MESSAGE in the bundle");
+        }
 
         builder.setMessage(messageString)
                 .setPositiveButton(positiveStringId, new DialogInterface.OnClickListener() {
@@ -82,5 +101,17 @@ public class AppDialog extends DialogFragment {
                 });
 
         return super.onCreateDialog(savedInstanceState);
+    }
+
+    @Override
+    public void onCancel(DialogInterface dialog) {
+        Log.d(TAG, "onCancel: called");
+
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        Log.d(TAG, "onDismiss: called");
+        super.onDismiss(dialog);
     }
 }
