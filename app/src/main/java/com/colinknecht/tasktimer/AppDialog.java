@@ -106,6 +106,10 @@ public class AppDialog extends DialogFragment {
     @Override
     public void onCancel(DialogInterface dialog) {
         Log.d(TAG, "onCancel: called");
+        if (mDialogEvents != null){
+            int dialogId = getArguments().getInt(DIALOG_ID);
+            mDialogEvents.onDialogCancelled(dialogId);
+        }
 
     }
 
