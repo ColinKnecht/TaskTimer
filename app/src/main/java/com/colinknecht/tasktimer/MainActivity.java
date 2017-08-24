@@ -11,16 +11,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity implements CursorRecyclerViewAdapter.OnTaskClickListener,
-AddEditActivityFragment.OnSaveClicked {
+AddEditActivityFragment.OnSaveClicked, AppDialog.DialogEvents {
     private static final String TAG = "MainActivity";
-//    Friday Aug 18
+//    Thursday Aug 24
 
     //whether or not the activity is in 2 pane mode
 
     private boolean mTwoPane = false;
 
-    private static final String ADD_EDIT_FRAGMENT = "AddEditFragment";
-    public static final int DELETE_DIALOG_ID = 1;
+    public static final int DIALOG_ID_DELETE = 1;
+    public static final int DIALOG_ID_CANCEL_EDIT = 2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,13 +93,14 @@ AddEditActivityFragment.OnSaveClicked {
         Log.d(TAG, "onDeleteClick: starts");
         AppDialog dialog = new AppDialog();
         Bundle args = new Bundle();
-        args.putInt(AppDialog.DIALOG_ID, DELETE_DIALOG_ID);
+        args.putInt(AppDialog.DIALOG_ID, DIALOG_ID_DELETE);
         args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.deldiag_message, task.getM_Id(), task.getName()));
         args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.deldiag_positive_caption);
 
+        args.putLong("TaskId", task.getM_Id());
+
         dialog.setArguments(args);
         dialog.show(getFragmentManager(), null);
-        getContentResolver().delete(TaskContract.buildTaskUri(task.getM_Id()), null, null);
     }
 
     private void taskEditRequest(Task task) {
@@ -129,6 +130,64 @@ AddEditActivityFragment.OnSaveClicked {
             else  { //adding a new task
                 startActivity(detailIntent);
             }
+        }
+    }
+
+    @Override
+    public void onPositiveDialogResult(int dialogId, Bundle args) {
+        Log.d(TAG, "onPositiveDialogResult: called");
+        switch (dialogId){
+            case DIALOG_ID_DELETE :
+                long taskId = args.getLong("TaskId");
+                if (BuildConfig.DEBUG && taskId == 0){
+                    throw new AssertionError("Task Id is Zero");}
+                getContentResolver().delete(TaskContract.buildTaskUri(taskId), null, null);
+                break;
+            case DIALOG_ID_CANCEL_EDIT :
+                //no action required
+                break;
+        }//switch
+
+    }
+
+    @Override
+    public void onNegativeDialogResult(int dialogId, Bundle args) {
+        Log.d(TAG, "onNegativeDialogResult: called");
+        switch (dialogId) {
+            case DIALOG_ID_DELETE :
+                // no action required
+                break;
+            case DIALOG_ID_CANCEL_EDIT:
+                finish();
+                break;
+        }
+    }
+
+    @Override
+    public void onDialogCancelled(int dialogId) {
+        Log.d(TAG, "onDialogCancelled: called");
+    }
+
+    @Override
+    public void onBackPressed() {
+        Log.d(TAG, "onBackPressed: called");
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        AddEditActivityFragment fragment = (AddEditActivityFragment) fragmentManager.findFragmentById(R.id.task_details_container);
+
+        if (fragment == null || fragment.canClose()) {
+            super.onBackPressed();
+        }
+        else {
+            //show dialogue to get confirmation to quit editing
+            AppDialog dialog = new AppDialog();
+            Bundle args = new Bundle();
+            args.putInt(AppDialog.DIALOG_ID, DIALOG_ID_CANCEL_EDIT);
+            args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.cancelEditDiag_message));
+            args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.cancelEditDiag_positive_caption);
+            args.putInt(AppDialog.DIALOG_NEGATIVE_RID, R.string.cacelEditDiag_negative_caption);
+
+            dialog.setArguments(args);
+            dialog.show(getFragmentManager(), null);
         }
     }
 }

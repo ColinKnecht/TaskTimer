@@ -36,6 +36,10 @@ public class AddEditActivityFragment extends Fragment {
         Log.d(TAG, "AddEditActivityFragment: constructor called");
     }
 
+    public boolean canClose(){
+        Log.d(TAG, "canClose: called");
+        return false;
+    }
     @Override
     public void onAttach(Context context) {
         Log.d(TAG, "onAttach: starts");
