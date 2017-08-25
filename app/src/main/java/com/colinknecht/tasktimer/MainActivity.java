@@ -96,12 +96,14 @@ AddEditActivityFragment.OnSaveClicked, AppDialog.DialogEvents {
     public void showAboutDialog(){
         @SuppressLint("InflateParams") View messageView = getLayoutInflater().inflate(R.layout.about, null, false);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.app_name);
+        builder.setIcon(R.mipmap.ic_launcher);
+
         builder.setView(messageView);
 
         mDialog = builder.create();
         mDialog.setCanceledOnTouchOutside(true);
-        builder.setTitle(R.string.app_name);
-        builder.setIcon(R.mipmap.ic_launcher);
+
 
         TextView tv = (TextView) messageView.findViewById(R.id.about_version);
         tv.setText("v" + BuildConfig.VERSION_NAME);
@@ -214,6 +216,14 @@ AddEditActivityFragment.OnSaveClicked, AppDialog.DialogEvents {
 
             dialog.setArguments(args);
             dialog.show(getFragmentManager(), null);
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mDialog != null && mDialog.isShowing()) {
+            mDialog.dismiss();
         }
     }
 }
