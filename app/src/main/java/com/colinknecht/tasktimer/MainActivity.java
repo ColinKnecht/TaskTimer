@@ -1,14 +1,18 @@
 package com.colinknecht.tasktimer;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements CursorRecyclerViewAdapter.OnTaskClickListener,
 AddEditActivityFragment.OnSaveClicked, AppDialog.DialogEvents {
@@ -21,6 +25,10 @@ AddEditActivityFragment.OnSaveClicked, AppDialog.DialogEvents {
 
     public static final int DIALOG_ID_DELETE = 1;
     public static final int DIALOG_ID_CANCEL_EDIT = 2;
+
+    private AlertDialog mDialog = null;  // module scope because we need to dismiss it in onStop
+                                        // eg when orientation changes to avoid memory leaks
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,12 +83,30 @@ AddEditActivityFragment.OnSaveClicked, AppDialog.DialogEvents {
             case R.id.menu_main_settings:
                 break;
             case R.id.menu_main_showAbout:
+                showAboutDialog();
                 break;
             case R.id.menu_main_generate:
                 break;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @SuppressLint("SetTextI18n")
+    public void showAboutDialog(){
+        @SuppressLint("InflateParams") View messageView = getLayoutInflater().inflate(R.layout.about, null, false);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(messageView);
+
+        mDialog = builder.create();
+        mDialog.setCanceledOnTouchOutside(true);
+        builder.setTitle(R.string.app_name);
+        builder.setIcon(R.mipmap.ic_launcher);
+
+        TextView tv = (TextView) messageView.findViewById(R.id.about_version);
+        tv.setText("v" + BuildConfig.VERSION_NAME);
+
+        mDialog.show();
     }
 
     @Override
