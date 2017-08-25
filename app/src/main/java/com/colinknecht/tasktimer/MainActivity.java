@@ -1,6 +1,7 @@
 package com.colinknecht.tasktimer;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -101,8 +102,19 @@ AddEditActivityFragment.OnSaveClicked, AppDialog.DialogEvents {
 
         builder.setView(messageView);
 
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+//                Log.d(TAG, "onClick: entering message view.onClick, showing " + mDialog.isShowing());
+                if (mDialog != null && mDialog.isShowing()) {
+                    mDialog.dismiss();
+                }
+            }
+        });
+
         mDialog = builder.create();
         mDialog.setCanceledOnTouchOutside(true);
+
 
 
         TextView tv = (TextView) messageView.findViewById(R.id.about_version);
@@ -226,4 +238,31 @@ AddEditActivityFragment.OnSaveClicked, AppDialog.DialogEvents {
             mDialog.dismiss();
         }
     }
+//    @SuppressLint("SetTextI18n")
+//    public void showAboutDialog(){
+//        @SuppressLint("InflateParams") View messageView = getLayoutInflater().inflate(R.layout.about, null, false);
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setTitle(R.string.app_name);
+//        builder.setIcon(R.mipmap.ic_launcher);
+//
+//        builder.setView(messageView);
+//
+//        mDialog = builder.create();
+//        mDialog.setCanceledOnTouchOutside(true);
+//
+//        messageView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.d(TAG, "onClick: entering message view.onClick, showing " + mDialog.isShowing());
+//                if (mDialog != null && mDialog.isShowing()) {
+//                    mDialog.dismiss();
+//                }
+//            }
+//        });
+//
+//        TextView tv = (TextView) messageView.findViewById(R.id.about_version);
+//        tv.setText("v" + BuildConfig.VERSION_NAME);
+//
+//        mDialog.show();
+//    }
 }
