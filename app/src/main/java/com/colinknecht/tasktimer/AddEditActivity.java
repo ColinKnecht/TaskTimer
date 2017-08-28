@@ -83,7 +83,7 @@ public class AddEditActivity extends AppCompatActivity implements AddEditActivit
         args.putInt(AppDialog.DIALOG_NEGATIVE_RID, R.string.cacelEditDiag_negative_caption);
 
         dialog.setArguments(args);
-        dialog.show(getFragmentManager(), null);
+        dialog.show(getSupportFragmentManager(), null);
     }
 
     @Override

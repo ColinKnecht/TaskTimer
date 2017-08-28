@@ -161,7 +161,7 @@ AddEditActivityFragment.OnSaveClicked, AppDialog.DialogEvents {
         args.putLong("TaskId", task.getM_Id());
 
         dialog.setArguments(args);
-        dialog.show(getFragmentManager(), null);
+        dialog.show(getSupportFragmentManager(), null);
     }
 
     private void taskEditRequest(Task task) {
@@ -248,7 +248,7 @@ AddEditActivityFragment.OnSaveClicked, AppDialog.DialogEvents {
             args.putInt(AppDialog.DIALOG_NEGATIVE_RID, R.string.cacelEditDiag_negative_caption);
 
             dialog.setArguments(args);
-            dialog.show(getFragmentManager(), null);
+            dialog.show(getSupportFragmentManager(), null);
         }
     }
 
