@@ -22,7 +22,9 @@
     <string name="cancelEditDiag_positive_caption">Continue editing?</string>
     <string name="cacelEditDiag_negative_caption">Abandon Changes</string>
     <string name="about_copyright">Copyright \u00a9 2017 colinknecht.com</string>
-    <string name="about_weblink">Instructions available at www.learnprogramming.academy</string>
+    <string name="about_weblink_21">Instructions available at www.learnprogramming.academy</string>
+    <string name="about_weblink">Instructions available at</string>
+    <string name="about_url"><u>www.learnprogramming.academy</u></string>
     <string name="about_email">For support email tasktimer@learnprogramming.academy</string>
-    <string name="about_credits">Icon derived from <b>analog clocl</b> @ openclipart.org by <b>anonymous</b></string>
+    <string name="about_credits">Icon derived from <b>analog clock</b> @ openclipart.org by <b>anonymous</b></string>
 </resources>
