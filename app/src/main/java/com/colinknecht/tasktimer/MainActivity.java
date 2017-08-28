@@ -1,8 +1,10 @@
 package com.colinknecht.tasktimer;
 
 import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements CursorRecyclerViewAdapter.OnTaskClickListener,
 AddEditActivityFragment.OnSaveClicked, AppDialog.DialogEvents {
@@ -119,6 +122,24 @@ AddEditActivityFragment.OnSaveClicked, AppDialog.DialogEvents {
 
         TextView tv = (TextView) messageView.findViewById(R.id.about_version);
         tv.setText("v" + BuildConfig.VERSION_NAME);
+
+        TextView about_url = (TextView) messageView.findViewById(R.id.about_url);
+        if (about_url != null) {
+            about_url.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    String s = ((TextView) v).getText().toString();
+                    intent.setData(Uri.parse(s));
+                    try {
+                        startActivity(intent);
+                    } catch (ActivityNotFoundException e) {
+                        Toast.makeText(MainActivity.this, "No browser applcation found, cannot visit world wide web", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+            });
+        }
 
         mDialog.show();
     }
