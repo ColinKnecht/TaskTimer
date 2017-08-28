@@ -7,14 +7,15 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatDialogFragment;
 import android.util.Log;
 
 /**
  * Created by colinknecht on 8/18/17.
- * 
+ *
  */
 
-public class AppDialog extends DialogFragment {
+public class AppDialog extends AppCompatDialogFragment {
     private static final String TAG = "AppDialog";
 
     public static final String DIALOG_ID = "id";
