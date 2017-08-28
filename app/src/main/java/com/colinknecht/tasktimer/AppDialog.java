@@ -1,6 +1,7 @@
 package com.colinknecht.tasktimer;
 
 import android.app.Dialog;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,6 +11,7 @@ import android.util.Log;
 
 /**
  * Created by colinknecht on 8/18/17.
+ * 
  */
 
 public class AppDialog extends DialogFragment {
@@ -54,6 +56,7 @@ public class AppDialog extends DialogFragment {
         mDialogEvents = null;
     }
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Log.d(TAG, "onCreateDialog: starts");
